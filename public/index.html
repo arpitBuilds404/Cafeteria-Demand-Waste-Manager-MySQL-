@@ -1,686 +1,1182 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafeteria Demand & Waste Manager</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafeteria Demand & Waste Manager</title>
 
-    <style>
-        :root {
-            --bg: #f3f5f2;
-            --sf: #ffffff;
-            --tx: #17211b;
-            --mu: #5b6a60;
-            --ln: #d9e0da;
-            --gr: #1f7a4d;
-            --rd: #c8452f;
-            --ac: #123d2b;
-        }
+<style>
+:root {
+    --bg: #101713;
+    --sf: #19231d;
+    --tx: #edf5ef;
+    --mu: #9aada1;
+    --ln: #2b3a30;
+    --gr: #59c58b;
+    --rd: #ed7863;
+    --ac: #59c58b;
+    --yellow: #e9bd62;
+    --blue: #64b9c6;
+    --purple: #a58bdb;
+}
 
-        @media(prefers-color-scheme:dark) {
-            :root {
-                --bg: #101613;
-                --sf: #18211c;
-                --tx: #e8efe9;
-                --mu: #9bab9f;
-                --ln: #2b382f;
-                --gr: #5cc48a;
-                --rd: #ef7b64;
-                --ac: #5cc48a;
-            }
-        }
+* {
+    box-sizing: border-box;
+}
 
-        * {
-            box-sizing: border-box;
-        }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--tx);
+    font: 15px/1.5 system-ui, sans-serif;
+}
 
-        body {
-            margin: 0;
-            background: var(--bg);
-            color: var(--tx);
-            font: 15px/1.5 system-ui, sans-serif;
-        }
+header {
+    background: #58bf89;
+    color: #102019;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
 
-        header {
-            background: var(--ac);
-            color: var(--bg);
-            padding: 14px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
+h1 {
+    margin: 0;
+    font-size: 23px;
+}
 
-        h1 {
-            margin: 0;
-            font-size: 20px;
-        }
+header label {
+    color: #102019;
+    font-weight: 600;
+}
 
-        nav {
-            display: flex;
-            gap: 4px;
-            padding: 10px 20px 0;
-            border-bottom: 1px solid var(--ln);
-            overflow-x: auto;
-        }
+header select {
+    min-width: 165px;
+    background: #17251d;
+    color: white;
+    border: 2px solid #e9bd62;
+    border-radius: 9px;
+    padding: 9px 12px;
+}
 
-        nav button {
-            background: none;
-            border: 0;
-            border-bottom: 3px solid transparent;
-            color: var(--mu);
-            padding: 8px 12px;
-            font: inherit;
-            cursor: pointer;
-            white-space: nowrap;
-        }
+nav {
+    display: flex;
+    gap: 4px;
+    padding: 10px 20px 0;
+    border-bottom: 1px solid var(--ln);
+    overflow-x: auto;
+    background: #101713;
+}
 
-        nav button.on {
-            color: var(--tx);
-            border-color: var(--gr);
-        }
+nav button {
+    background: none;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    color: var(--mu);
+    padding: 12px 16px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
 
-        main {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            gap: 14px;
-        }
+nav button:hover {
+    color: white;
+}
 
-        .box {
-            background: var(--sf);
-            border: 1px solid var(--ln);
-            border-radius: 8px;
-            padding: 14px;
-            overflow-x: auto;
-        }
+nav button.on {
+    color: white;
+    border-color: var(--gr);
+}
 
-        h2 {
-            font-size: 17px;
-            margin: 0 0 10px;
-        }
+main {
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 24px;
+    display: grid;
+    gap: 18px;
+}
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 14px;
-        }
+.box {
+    background: var(--sf);
+    border: 1px solid var(--ln);
+    border-radius: 11px;
+    padding: 18px;
+    overflow-x: auto;
+}
 
-        th,
-        td {
-            text-align: left;
-            padding: 6px 8px;
-            border-bottom: 1px solid var(--ln);
-            white-space: nowrap;
-        }
+h2 {
+    font-size: 18px;
+    margin: 0 0 14px;
+}
 
-        th {
-            color: var(--mu);
-        }
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+}
 
-        form {
-            display: grid;
-            gap: 8px;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            align-items: end;
-        }
+th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid var(--ln);
+    white-space: nowrap;
+}
 
-        label {
-            display: grid;
-            gap: 3px;
-            font-size: 13px;
-            color: var(--mu);
-        }
+th {
+    color: var(--mu);
+}
 
-        select,
-        input,
-        button.go {
-            font: inherit;
-            padding: 7px 9px;
-            border: 1px solid var(--ln);
-            border-radius: 6px;
-            background: var(--sf);
-            color: var(--tx);
-        }
+tr:hover td {
+    background: rgba(89,197,139,.04);
+}
 
-        header select {
-            min-width: 150px;
-        }
+form {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    align-items: end;
+}
 
-        button.go {
-            background: var(--ac);
-            color: white;
-            border-color: var(--ac);
-            font-weight: 600;
-            cursor: pointer;
-        }
+label {
+    display: grid;
+    gap: 5px;
+    font-size: 13px;
+    color: var(--mu);
+}
 
-        .ok {
-            color: var(--gr);
-        }
+select, input, button.go {
+    font: inherit;
+    padding: 9px 11px;
+    border: 1px solid var(--ln);
+    border-radius: 7px;
+    background: #111a14;
+    color: var(--tx);
+}
 
-        .er {
-            color: var(--rd);
-        }
+button.go {
+    background: #236b49;
+    color: white;
+    border-color: #236b49;
+    font-weight: 600;
+    cursor: pointer;
+}
 
-        .note {
-            color: var(--mu);
-            font-size: 13px;
-        }
+button.go:hover {
+    background: #2d885c;
+}
 
-        @media(max-width:600px) {
-            header {
-                align-items: flex-start;
-            }
+.ok { color: var(--gr); }
+.er { color: var(--rd); }
 
-            main {
-                padding: 12px;
-            }
+.note {
+    color: var(--mu);
+    font-size: 13px;
+}
 
-            nav {
-                padding-left: 10px;
-            }
-        }
-    </style>
+/* DASHBOARD */
+
+.dashboard {
+    display: grid;
+    gap: 18px;
+}
+
+.dashboard-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.dashboard-heading h2 {
+    margin: 0;
+    font-size: 21px;
+}
+
+.dashboard-heading p {
+    margin: 3px 0 0;
+    color: var(--mu);
+    font-size: 13px;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.kpi-card {
+    background: var(--sf);
+    border: 1px solid var(--ln);
+    border-radius: 11px;
+    padding: 18px;
+    min-height: 130px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-card::after {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    right: -30px;
+    bottom: -45px;
+    background: var(--card-color);
+    opacity: .10;
+}
+
+.kpi-label {
+    color: var(--mu);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.kpi-value {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.4;
+    margin-top: 3px;
+    color: var(--card-color);
+}
+
+.kpi-sub {
+    font-size: 13px;
+    color: var(--mu);
+}
+
+.chart-box {
+    background: var(--sf);
+    border: 1px solid var(--ln);
+    border-radius: 11px;
+    padding: 20px;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.chart-header h2 {
+    margin: 0;
+}
+
+.chart-legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--mu);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-dot {
+    height: 9px;
+    width: 9px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.chart-subtitle {
+    color: var(--mu);
+    font-size: 13px;
+    margin: 5px 0 20px;
+}
+
+.chart-area {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    height: 265px;
+    padding: 12px 5px 0;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--ln);
+}
+
+.bar-column {
+    flex: 1;
+    min-width: 35px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.bar-value {
+    font-size: 11px;
+    color: var(--mu);
+    white-space: nowrap;
+}
+
+.bar {
+    width: min(100%, 66px);
+    min-height: 4px;
+    border-radius: 7px 7px 2px 2px;
+    transition: height .6s ease, filter .2s ease, transform .2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.bar:hover {
+    filter: brightness(1.2);
+    transform: scaleX(1.06);
+}
+
+.bar-date {
+    font-size: 12px;
+    color: var(--mu);
+    padding: 8px 0 10px;
+}
+
+.chart-empty {
+    color: var(--mu);
+    text-align: center;
+    padding: 50px 10px;
+}
+
+.dashboard-tables {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media(max-width:800px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-tables {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:550px) {
+    header {
+        align-items: flex-start;
+    }
+
+    h1 {
+        font-size: 19px;
+    }
+
+    main {
+        padding: 12px;
+    }
+
+    nav {
+        padding-left: 8px;
+    }
+
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-area {
+        gap: 10px;
+    }
+
+    .chart-box {
+        padding: 14px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <header>
-        <h1>Cafeteria Demand & Waste Manager (MySQL)</h1>
+<header>
+    <h1>Cafeteria Demand & Waste Manager</h1>
 
-        <label>
-            Select Role
-            <select id="role">
-                <option value="manager">Manager</option>
-                <option value="staff">Cafeteria Staff</option>
-            </select>
-        </label>
-    </header>
+    <label>
+        Select Role
+        <select id="role">
+            <option value="manager">Manager</option>
+            <option value="staff">Cafeteria Staff</option>
+        </select>
+    </label>
+</header>
 
-    <nav id="nav"></nav>
+<nav id="nav"></nav>
+<main id="app"></main>
 
-    <main id="app"></main>
+<script>
 
-    <script>
+// ========================================
+// API CONFIGURATION
+// ========================================
 
-        // ========================================
-        // API CONFIGURATION
-        // ========================================
+const $ = s => document.querySelector(s);
 
-        const $ = s => document.querySelector(s);
+const api = async (u, b) => {
+    const r = await fetch(
+        "/api/" + u,
+        b ? {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(b)
+        } : {}
+    );
 
-        const api = async (u, b) => {
-            const r = await fetch(
-                "/api/" + u,
-                b ? {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(b)
-                } : {}
-            );
+    const j = await r.json();
 
-            const j = await r.json();
+    if (!r.ok) {
+        throw new Error(j.error || "Something went wrong");
+    }
 
-            if (!r.ok) {
-                throw new Error(j.error || "Something went wrong");
-            }
-
-            return j;
-        };
+    return j;
+};
 
 
-        // ========================================
-        // HELPER FUNCTIONS
-        // ========================================
+// ========================================
+// HELPER FUNCTIONS
+// ========================================
 
-        const esc = s =>
-            String(s ?? "").replace(/[&<>"]/g, c => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;"
-            }[c]));
+const esc = s =>
+    String(s ?? "").replace(/[&<>"]/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;"
+    }[c]));
 
-        const tbl = rows =>
-            rows.length
-                ? `<table>
-        <tr>
-          ${Object.keys(rows[0])
+const tbl = rows =>
+    rows.length
+        ? `<table>
+            <tr>
+                ${Object.keys(rows[0])
                     .map(k => `<th>${esc(k)}</th>`).join("")}
-        </tr>
+            </tr>
+            ${rows.map(r => `
+                <tr>
+                    ${Object.values(r)
+                        .map(v => `<td>${esc(v)}</td>`).join("")}
+                </tr>
+            `).join("")}
+        </table>`
+        : "<p class='note'>No rows available.</p>";
 
-        ${rows.map(r => `
-          <tr>
-            ${Object.values(r)
-                            .map(v => `<td>${esc(v)}</td>`).join("")}
-          </tr>
-        `).join("")}
-      </table>`
-                : "<p>No rows available.</p>";
+const opts = (a, v, t) =>
+    a.map(x =>
+        `<option value="${esc(x[v])}">${esc(x[t])}</option>`
+    ).join("");
 
-        const opts = (a, v, t) =>
-            a.map(x =>
-                `<option value="${esc(x[v])}">${esc(x[t])}</option>`
-            ).join("");
+const box = (t, h) =>
+    `<div class="box"><h2>${esc(t)}</h2>${h}</div>`;
 
-        const box = (t, h) =>
-            `<div class="box"><h2>${t}</h2>${h}</div>`;
+const msg = '<div id="m" role="status"></div>';
 
-        const msg = '<div id="m" role="status"></div>';
+const say = (ok, t) => {
+    const message = $("#m");
 
-        const say = (ok, t) => {
-            const message = $("#m");
-
-            if (message) {
-                message.innerHTML =
-                    `<span class="${ok ? "ok" : "er"}">${esc(t)}</span>`;
-            }
-        };
+    if (message) {
+        message.innerHTML =
+            `<span class="${ok ? "ok" : "er"}">${esc(t)}</span>`;
+    }
+};
 
 
-        // ========================================
-        // ROLE-BASED ACCESS CONTROL
-        // ========================================
+// ========================================
+// ROLE-BASED ACCESS CONTROL
+// ========================================
 
-        let role = "manager";
-        let tab = "Dashboard";
+let role = "manager";
+let tab = "Dashboard";
 
-        const permissions = {
-            Dashboard: ["manager", "staff"],
-            Prepare: ["manager", "staff"],
-            Purchase: ["manager"],
-            Waste: ["manager", "staff"],
-            Analytics: ["manager"],
-            Audit: ["manager"]
-        };
+const permissions = {
+    Dashboard: ["manager", "staff"],
+    Prepare: ["manager", "staff"],
+    Purchase: ["manager"],
+    Waste: ["manager", "staff"],
+    Analytics: ["manager"],
+    Audit: ["manager"]
+};
 
-        function hasAccess(page) {
-            return permissions[page]?.includes(role) || false;
+function hasAccess(page) {
+    return permissions[page]?.includes(role) || false;
+}
+
+
+// ========================================
+// FORM HANDLING
+// ========================================
+
+function form(fields, btn) {
+    return `
+        <form id="f">
+            ${fields}
+            <button class="go">${btn}</button>
+        </form>
+        ${msg}
+    `;
+}
+
+function bind(url, get, tabName) {
+    const f = $("#f");
+
+    if (!f) return;
+
+    f.onsubmit = async e => {
+        e.preventDefault();
+
+        try {
+            const r = await api(url, get());
+
+            await show(tabName);
+
+            say(true, r.message || "Operation completed successfully");
+
+        } catch (err) {
+            say(false, err.message);
         }
-
-
-        // ========================================
-        // FORM HANDLING
-        // ========================================
-
-        function form(fields, btn) {
-            return `
-    <form id="f">
-      ${fields}
-      <button class="go">${btn}</button>
-    </form>
-    ${msg}
-  `;
-        }
-
-        function bind(url, get, tabName) {
-
-            const f = $("#f");
-
-            if (!f) return;
-
-            f.onsubmit = async e => {
-                e.preventDefault();
-
-                try {
-                    const r = await api(url, get());
-
-                    await show(tabName);
-
-                    say(true, r.message || "Operation completed successfully");
-
-                } catch (err) {
-                    say(false, err.message);
-                }
-            };
-        }
-
-
-        // ========================================
-        // DASHBOARD
-        // ========================================
-
-        const tabs = {
-
-            async Dashboard() {
-
-                const d = await api("dashboard");
-
-                return (
-                    box("Low Stock", tbl(d.low)) +
-                    box("Today's Preparation", tbl(d.today)) +
-                    box("Daily KPI (v_daily_kpi)", tbl(d.kpi))
-                );
-            },
-
-
-            // ========================================
-            // PREPARE FOOD
-            // ========================================
-
-            async Prepare() {
-
-                const x = await api("dishes");
-
-                setTimeout(() => {
-
-                    bind(
-                        "prepare",
-
-                        () => ({
-                            dish: $("#d").value,
-                            qty: $("#q").value,
-                            fail: $("#x").value == "1"
-                        }),
-
-                        "Prepare"
-                    );
-
-                }, 0);
-
-                return box(
-                    "Record Food Preparation",
-
-                    form(`
-        <label>
-          Dish
-          <select id="d">
-            ${opts(x, "dish_id", "dish_name")}
-          </select>
-        </label>
-
-        <label>
-          Portions
-          <input
-            id="q"
-            type="number"
-            min="1"
-            value="40"
-            required
-          >
-        </label>
-
-        <label>
-          Simulate Failure After Savepoint
-          <select id="x">
-            <option value="0">No</option>
-            <option value="1">Yes</option>
-          </select>
-        </label>
-
-      `, "Prepare")
-                );
-            },
-
-
-            // ========================================
-            // PURCHASE INGREDIENTS
-            // MANAGER ONLY
-            // ========================================
-
-            async Purchase() {
-
-                const [i, s] = await Promise.all([
-                    api("ingredients"),
-                    api("suppliers")
-                ]);
-
-                setTimeout(() => {
-
-                    bind(
-                        "purchase",
-
-                        () => ({
-                            ingredient: $("#i").value,
-                            supplier: $("#s").value,
-                            qty: $("#q").value
-                        }),
-
-                        "Purchase"
-                    );
-
-                }, 0);
-
-                return (
-                    box(
-                        "Record Purchase",
-
-                        form(`
-          <label>
-            Ingredient
-            <select id="i">
-              ${opts(i, "ingredient_id", "ingredient_name")}
-            </select>
-          </label>
-
-          <label>
-            Supplier
-            <select id="s">
-              ${opts(s, "supplier_id", "supplier_name")}
-            </select>
-          </label>
-
-          <label>
-            Quantity
-            <input
-              id="q"
-              type="number"
-              min="1"
-              value="20"
-              required
-            >
-          </label>
-
-        `, "Add Purchase")
-                    ) +
-
-                    box("Current Stock", tbl(i))
-                );
-            },
-
-
-            // ========================================
-            // WASTE MANAGEMENT
-            // ========================================
-
-            async Waste() {
-
-                const x = await api("dishes");
-
-                setTimeout(() => {
-
-                    bind(
-                        "usage",
-
-                        () => ({
-                            dish: $("#d").value,
-                            cons: $("#c").value,
-                            waste: $("#w").value,
-                            reason: $("#r").value
-                        }),
-
-                        "Waste"
-                    );
-
-                }, 0);
-
-                return box(
-                    "Record Consumption and Waste",
-
-                    form(`
-        <label>
-          Dish
-          <select id="d">
-            ${opts(x, "dish_id", "dish_name")}
-          </select>
-        </label>
-
-        <label>
-          Consumed
-          <input
-            id="c"
-            type="number"
-            min="0"
-            value="0"
-            required
-          >
-        </label>
-
-        <label>
-          Wasted
-          <input
-            id="w"
-            type="number"
-            min="0"
-            value="0"
-            required
-          >
-        </label>
-
-        <label>
-          Reason
-          <select id="r">
-            <option>Over-preparation</option>
-            <option>Left on plates</option>
-            <option>Spoilage</option>
-          </select>
-        </label>
-
-      `, "Save")
-                );
-            },
-
-
-            // ========================================
-            // ANALYTICS
-            // MANAGER ONLY
-            // ========================================
-
-            async Analytics() {
-
-                const a = await api("analytics");
-
-                return (
-                    box(
-                        "Dishes Ranked by Average Waste (RANK)",
-                        tbl(a.ranking)
-                    ) +
-
-                    box(
-                        "Weekly Demand (CTE)",
-                        tbl(a.weekly)
-                    )
-                );
-            },
-
-
-            // ========================================
-            // AUDIT LOG
-            // MANAGER ONLY
-            // ========================================
-
-            async Audit() {
-
-                return box(
-                    "Audit Log (Trigger Generated)",
-                    tbl(await api("audit"))
-                );
-            }
-
+    };
+}
+
+
+// ========================================
+// CHART DATA HELPERS
+// ========================================
+
+// Finds a database column even if its name
+// uses different capitalization or underscores.
+
+function getField(row, candidates) {
+    const keys = Object.keys(row || {});
+
+    for (const candidate of candidates) {
+        const key = keys.find(k =>
+            k.toLowerCase().replace(/[^a-z0-9]/g, "") ===
+            candidate.toLowerCase().replace(/[^a-z0-9]/g, "")
+        );
+
+        if (key !== undefined) return row[key];
+    }
+
+    return null;
+}
+
+function getWasteStats(row) {
+
+    const prepared = Number(getField(row, [
+        "qty_prepared",
+        "prepared",
+        "total_prepared",
+        "prepared_qty",
+        "portions_prepared"
+    ]));
+
+    const wasted = Number(getField(row, [
+        "qty_wasted",
+        "wasted",
+        "total_wasted",
+        "waste",
+        "wasted_qty"
+    ]));
+
+    const existingPct = getField(row, [
+        "waste_pct",
+        "waste_percentage",
+        "avg_waste_pct",
+        "waste_percent"
+    ]);
+
+    let percentage = null;
+
+    if (existingPct !== null && Number.isFinite(Number(existingPct))) {
+        percentage = Number(existingPct);
+    } else if (prepared > 0 && Number.isFinite(wasted)) {
+        percentage = wasted / prepared * 100;
+    }
+
+    return {
+        prepared: Number.isFinite(prepared) ? prepared : 0,
+        wasted: Number.isFinite(wasted) ? wasted : 0,
+        percentage
+    };
+}
+
+function formatDate(value) {
+    if (!value) return "N/A";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value).slice(0, 10);
+    }
+
+    return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short"
+    });
+}
+
+
+// ========================================
+// DAILY WASTE CHART
+// ========================================
+
+function createWasteChart(rows) {
+
+    if (!rows || !rows.length) {
+        return `
+            <div class="chart-empty">
+                No daily KPI data available yet.
+            </div>
+        `;
+    }
+
+    const chartData = rows.map(row => {
+
+        const stats = getWasteStats(row);
+
+        return {
+            date: getField(row, [
+                "prep_date",
+                "date",
+                "day"
+            ]),
+            percentage: stats.percentage,
+            prepared: stats.prepared,
+            wasted: stats.wasted
         };
 
+    }).filter(x => x.percentage !== null);
 
-        // ========================================
-        // DISPLAY AND NAVIGATION
-        // ========================================
+    if (!chartData.length) {
+        return `
+            <div class="chart-empty">
+                Could not find prepared and wasted quantity columns
+                in the daily KPI data.
+                <br>
+                Check your v_daily_kpi view.
+            </div>
+        `;
+    }
 
-        async function show(t) {
+    // Oldest date on the left, newest on the right.
+    chartData.sort((a, b) =>
+        new Date(a.date) - new Date(b.date)
+    );
 
-            if (t) {
-                tab = t;
-            }
+    const maxValue = Math.max(
+        10,
+        ...chartData.map(x => x.percentage)
+    );
 
-            // Check role permissions
-            if (!hasAccess(tab)) {
-                tab = "Dashboard";
-            }
+    const colors = [
+        "#d87560",
+        "#e5b85c",
+        "#55bd89",
+        "#5ab8c5",
+        "#9a83d1"
+    ];
 
-            // Display only permitted tabs
-            $("#nav").innerHTML = Object.keys(tabs)
+    return `
+        <div class="chart-area">
 
-                .filter(k => hasAccess(k))
+            ${chartData.map((item, index) => {
 
-                .map(k => `
-      <button
-        data-t="${k}"
-        class="${k == tab ? "on" : ""}"
-      >
-        ${k}
-      </button>
-    `).join("");
-
-
-            // Load selected page
-            try {
-
-                $("#app").innerHTML = await tabs[tab]();
-
-            } catch (e) {
-
-                $("#app").innerHTML = box(
-                    "Error",
-                    `<span class="er">${esc(e.message)}</span>`
+                const height = Math.max(
+                    3,
+                    item.percentage / maxValue * 100
                 );
 
-            }
-        }
+                const color = colors[index % colors.length];
+
+                const tooltip =
+                    `${formatDate(item.date)} | ` +
+                    `Waste: ${item.percentage.toFixed(1)}% | ` +
+                    `Prepared: ${item.prepared} | ` +
+                    `Wasted: ${item.wasted}`;
+
+                return `
+                    <div class="bar-column"
+                         title="${esc(tooltip)}">
+
+                        <div class="bar-value">
+                            ${item.percentage.toFixed(1)}%
+                        </div>
+
+                        <div class="bar"
+                             style="
+                                height:${height}%;
+                                background:${color};
+                             "
+                             title="${esc(tooltip)}">
+                        </div>
+
+                        <div class="bar-date">
+                            ${esc(formatDate(item.date))}
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("")}
+
+        </div>
+    `;
+}
 
 
-        // ========================================
-        // NAVIGATION CLICK
-        // ========================================
+// ========================================
+// DASHBOARD
+// ========================================
 
-        $("#nav").onclick = e => {
+const tabs = {
 
-            const t = e.target.dataset.t;
+    async Dashboard() {
 
-            if (t && hasAccess(t)) {
-                show(t);
-            }
+        const d = await api("dashboard");
 
-        };
+        const kpi = d.kpi || [];
+        const low = d.low || [];
+        const today = d.today || [];
+
+        // Today's preparation total.
+        const todayPrepared = today.reduce(
+            (sum, row) =>
+                sum + Number(row.qty_prepared || 0),
+            0
+        );
+
+        // If today's table is empty, use today's KPI row.
+        const latestStats = kpi.length
+            ? getWasteStats(kpi[0])
+            : {prepared: 0, wasted: 0, percentage: null};
+
+        const preparedValue = todayPrepared || latestStats.prepared;
+
+        // Yesterday's waste percentage.
+        const yesterdayRow = kpi.length > 1 ? kpi[1] : kpi[0];
+        const yesterdayStats = yesterdayRow
+            ? getWasteStats(yesterdayRow)
+            : {percentage: null};
+
+        const yesterdayWaste =
+            yesterdayStats.percentage !== null
+                ? yesterdayStats.percentage.toFixed(1) + "%"
+                : "N/A";
+
+        return `
+
+            <section class="dashboard">
+
+                <div class="dashboard-heading">
+                    <div>
+                        <h2>Dashboard Overview</h2>
+                        <p>Monitor cafeteria demand, preparation and food waste.</p>
+                    </div>
+                </div>
+
+                <div class="kpi-grid">
+
+                    <div class="kpi-card"
+                         style="--card-color:#59c58b">
+
+                        <div class="kpi-label">
+                            Prepared Today
+                        </div>
+
+                        <div class="kpi-value">
+                            ${preparedValue}
+                        </div>
+
+                        <div class="kpi-sub">
+                            Total portions prepared
+                        </div>
+
+                    </div>
+
+                    <div class="kpi-card"
+                         style="--card-color:#ed7863">
+
+                        <div class="kpi-label">
+                            Yesterday Waste
+                        </div>
+
+                        <div class="kpi-value">
+                            ${yesterdayWaste}
+                        </div>
+
+                        <div class="kpi-sub">
+                            Percentage of prepared food
+                        </div>
+
+                    </div>
+
+                    <div class="kpi-card"
+                         style="--card-color:#e9bd62">
+
+                        <div class="kpi-label">
+                            Low Stock Items
+                        </div>
+
+                        <div class="kpi-value">
+                            ${low.length}
+                        </div>
+
+                        <div class="kpi-sub">
+                            Items below reorder level
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-box">
+
+                    <div class="chart-header">
+                        <h2>Daily Waste %</h2>
+
+                        <div class="chart-legend">
+                            <span class="legend-item">
+                                <span class="legend-dot"
+                                      style="background:#d87560"></span>
+                                Waste
+                            </span>
+
+                            <span class="legend-item">
+                                <span class="legend-dot"
+                                      style="background:#55bd89"></span>
+                                Daily data
+                            </span>
+                        </div>
+                    </div>
+
+                    <p class="chart-subtitle">
+                        Daily waste percentage based on actual database records.
+                        Hover over a bar to see details.
+                    </p>
+
+                    ${createWasteChart(kpi)}
+
+                </div>
+
+                <div class="dashboard-tables">
+
+                    ${box(
+                        "Low Stock Items",
+                        tbl(low)
+                    )}
+
+                    ${box(
+                        "Today's Preparation",
+                        tbl(today)
+                    )}
+
+                </div>
+
+                ${box(
+                    "Daily KPI Records",
+                    tbl(kpi)
+                )}
+
+            </section>
+
+        `;
+    },
 
 
-        // ========================================
-        // ROLE SWITCHING
-        // ========================================
+    // ========================================
+    // PREPARE FOOD
+    // ========================================
 
-        $("#role").onchange = e => {
+    async Prepare() {
 
-            role = e.target.value;
+        const x = await api("dishes");
 
-            // Start from Dashboard after switching role
-            tab = "Dashboard";
+        setTimeout(() => {
+            bind(
+                "prepare",
+                () => ({
+                    dish: $("#d").value,
+                    qty: $("#q").value,
+                    fail: $("#x").value == "1"
+                }),
+                "Prepare"
+            );
+        }, 0);
 
-            show();
+        return box(
+            "Record Food Preparation",
 
-        };
+            form(`
+                <label>
+                    Dish
+                    <select id="d">
+                        ${opts(x, "dish_id", "dish_name")}
+                    </select>
+                </label>
+
+                <label>
+                    Portions
+                    <input id="q"
+                           type="number"
+                           min="1"
+                           value="40"
+                           required>
+                </label>
+
+                <label>
+                    Simulate Failure After Savepoint
+                    <select id="x">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </label>
+            `, "Prepare")
+        );
+    },
 
 
-        // ========================================
-        // INITIALIZE APPLICATION
-        // ========================================
+    // ========================================
+    // PURCHASE INGREDIENTS
+    // ========================================
 
-        show("Dashboard");
+    async Purchase() {
 
-    </script>
+        const [i, s] = await Promise.all([
+            api("ingredients"),
+            api("suppliers")
+        ]);
+
+        setTimeout(() => {
+            bind(
+                "purchase",
+                () => ({
+                    ingredient: $("#i").value,
+                    supplier: $("#s").value,
+                    qty: $("#q").value
+                }),
+                "Purchase"
+            );
+        }, 0);
+
+        return (
+            box(
+                "Record Purchase",
+
+                form(`
+                    <label>
+                        Ingredient
+                        <select id="i">
+                            ${opts(i, "ingredient_id", "ingredient_name")}
+                        </select>
+                    </label>
+
+                    <label>
+                        Supplier
+                        <select id="s">
+                            ${opts(s, "supplier_id", "supplier_name")}
+                        </select>
+                    </label>
+
+                    <label>
+                        Quantity
+                        <input id="q"
+                               type="number"
+                               min="1"
+                               value="20"
+                               required>
+                    </label>
+                `, "Add Purchase")
+            ) +
+
+            box("Current Stock", tbl(i))
+        );
+    },
+
+
+    // ========================================
+    // WASTE MANAGEMENT
+    // ========================================
+
+    async Waste() {
+
+        const x = await api("dishes");
+
+        setTimeout(() => {
+            bind(
+                "usage",
+                () => ({
+                    dish: $("#d").value,
+                    cons: $("#c").value,
+                    waste: $("#w").value,
+                    reason: $("#r").value
+                }),
+                "Waste"
+            );
+        }, 0);
+
+        return box(
+            "Record Consumption and Waste",
+
+            form(`
+                <label>
+                    Dish
+                    <select id="d">
+                        ${opts(x, "dish_id", "dish_name")}
+                    </select>
+                </label>
+
+                <label>
+                    Consumed
+                    <input id="c"
+                           type="number"
+                           min="0"
+                           value="0"
+                           required>
+                </label>
+
+                <label>
+                    Wasted
+                    <input id="w"
+                           type="number"
+                           min="0"
+                           value="0"
+                           required>
+                </label>
+
+                <label>
+                    Reason
+                    <select id="r">
+                        <option>Over-preparation</option>
+                        <option>Left on plates</option>
+                        <option>Spoilage</option>
+                    </select>
+                </label>
+            `, "Save")
+        );
+    },
+
+
+    // ========================================
+    // ANALYTICS
+    // ========================================
+
+    async Analytics() {
+
+        const a = await api("analytics");
+
+        return (
+            box(
+                "Dishes Ranked by Average Waste (RANK)",
+                tbl(a.ranking)
+            ) +
+
+            box(
+                "Weekly Demand (CTE)",
+                tbl(a.weekly)
+            )
+        );
+    },
+
+
+    // ========================================
+    // AUDIT LOG
+    // ========================================
+
+    async Audit() {
+
+        return box(
+            "Audit Log (Trigger Generated)",
+            tbl(await api("audit"))
+        );
+    }
+
+};
+
+
+// ========================================
+// DISPLAY AND NAVIGATION
+// ========================================
+
+async function show(t) {
+
+    if (t) {
+        tab = t;
+    }
+
+    if (!hasAccess(tab)) {
+        tab = "Dashboard";
+    }
+
+    $("#nav").innerHTML = Object.keys(tabs)
+        .filter(k => hasAccess(k))
+        .map(k => `
+            <button
+                data-t="${k}"
+                class="${k == tab ? "on" : ""}">
+                ${k}
+            </button>
+        `).join("");
+
+    try {
+
+        $("#app").innerHTML = await tabs[tab]();
+
+    } catch (e) {
+
+        $("#app").innerHTML = box(
+            "Error",
+            `<span class="er">${esc(e.message)}</span>`
+        );
+
+    }
+}
+
+
+// ========================================
+// NAVIGATION CLICK
+// ========================================
+
+$("#nav").onclick = e => {
+
+    const t = e.target.dataset.t;
+
+    if (t && hasAccess(t)) {
+        show(t);
+    }
+};
+
+
+// ========================================
+// ROLE SWITCHING
+// ========================================
+
+$("#role").onchange = e => {
+
+    role = e.target.value;
+    tab = "Dashboard";
+
+    show();
+
+};
+
+
+// ========================================
+// INITIALIZE
+// ========================================
+
+show("Dashboard");
+
+</script>
 
 </body>
-
 </html>
+git status
