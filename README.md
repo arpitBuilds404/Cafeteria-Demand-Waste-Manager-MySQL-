@@ -1,4 +1,4 @@
-# Cafeteria Demand & Waste Manager (Node + MySQL)
+# Cafeteria Demand & Waste  Manager (Node + MySQL)
 
 ## Setup
 1. Install Node 18+ and MySQL 8+.
